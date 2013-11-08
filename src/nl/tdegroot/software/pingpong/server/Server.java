@@ -77,12 +77,26 @@ public class Server implements Runnable {
 		};
 	}
 
+	private void broadcast(String message) {
+		for (int i = 0; i < clients.size(); i++) {
+			ServerClient client = clients.get(i);
+			byte[] data = message.getBytes();
+			send(data, client.address, client.port);
+		}
+	}
+
 	public void read(DatagramPacket packet) {
 		String message = new String(packet.getData());
 		if (message.startsWith("/c/")) {
 			String name = message.substring(3, message.length());
+			System.out.println(clients.size());
 			addClient(new ServerClient(name, packet.getAddress(), packet.getPort()));
+			System.out.println(clients.size());
 			System.out.println("Added a new client with name: " + name);
+		} else if (message.startsWith("/b/")) {
+			String msg = message.substring(3, message.length());
+			System.out.println("Got a broadcast request");
+			broadcast(msg);
 		} else {
 			System.out.println(message);
 		}

@@ -3,10 +3,7 @@ package nl.tdegroot.software.pingpong;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.*;
 
@@ -33,6 +30,8 @@ public class Client extends JFrame {
 		if (!login(address)) {
 			log("Unsuccessful connection!");
 			System.out.println("Unsuccessful connection!");
+		} else {
+			System.out.println("Successfully connected to " + address + ":" + port);
 		}
 		send(("/c/" + name).getBytes());
 	}
@@ -87,6 +86,12 @@ public class Client extends JFrame {
 		contentPane.add(btnSend);
 		textField.requestFocusInWindow();
 
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				send("/x/" + name);
+			}
+		});
+
 		setLocationRelativeTo(null);
 	}
 
@@ -106,16 +111,15 @@ public class Client extends JFrame {
 		return true;
 	}
 
-	public String receive() {
+	public void receive() {
 		byte[] data = new byte[1024];
 		DatagramPacket packet = new DatagramPacket(data, data.length);
 		try {
 			socket.receive(packet);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String message = new String(packet.getData());
-		return message;
+		read(packet);
 	}
 
 	public void send(final byte[] data) {
@@ -134,14 +138,19 @@ public class Client extends JFrame {
 
 	public void send(String msg) {
 		if (msg.equals("")) return;
-		send(msg.getBytes());
-		log(name + "~" + msg);
+		String message = "/b/" + name + "~" + msg;
+		send(message.getBytes());
 		textField.setText("");
+	}
+
+	private void read(DatagramPacket packet) {
+		String message = new String(packet.getData());
+		log(message);
+		System.out.println("Received a message");
 	}
 
 	private void log(String msg) {
 		textArea.append(msg + "\n\r");
 		System.out.println("Log: " + msg);
 	}
-
 }
