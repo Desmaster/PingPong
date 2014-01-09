@@ -91,7 +91,7 @@ public class Login extends JFrame {
 		String address = txtAddress.getText();
 		int port = Integer.parseInt(txtPort.getText());
 		System.out.println("Going to login as " + username + " on " + address + ":" + port);
-		Client client = new Client(username, address, port);
+		ClientWindow client = new ClientWindow(username, address, port);
 		client.setVisible(true);
 		client.requestFocus();
 		dispose();
