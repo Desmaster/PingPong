@@ -1,5 +1,7 @@
 package nl.tdegroot.software.pingpong;
 
+import sun.print.resources.serviceui_pt_BR;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
@@ -55,7 +57,9 @@ public class ClientWindow extends JFrame implements Runnable {
         console.setFont(new Font("Monospaced", Font.PLAIN, 13));
         console.setBounds(0, 0, 632, 350);
         console.setBackground(new Color(0, 0, 0));
-        contentPane.add(console);
+        JScrollPane scrollPane = new JScrollPane(console);
+        scrollPane.setBounds(0, 0, 632, 350);
+        contentPane.add(scrollPane);
 
         caret = (DefaultCaret) console.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);

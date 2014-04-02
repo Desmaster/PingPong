@@ -1,14 +1,11 @@
 package nl.tdegroot.software.pingpong.server;
 
-import nl.tdegroot.software.pingpong.Client;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Server implements Runnable {
